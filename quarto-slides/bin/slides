@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 # slides: start, edit, preview and render Quarto reveal.js decks.
-# Put quarto-slides/bin on PATH (see README). Works in bash and zsh.
+# Put quarto-slides/bin on PATH, or link this file into it (see README).
+# Works in bash and zsh.
 set -euo pipefail
 
-SLIDES_HOME="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# This file's real location, through any symlink to it
+self="${BASH_SOURCE[0]}"
+while [ -L "$self" ]; do
+  target="$(readlink "$self")"
+  case "$target" in /*) self="$target" ;; *) self="$(dirname "$self")/$target" ;; esac
+done
+SLIDES_HOME="$(cd "$(dirname "$self")/.." && pwd)"
 TEMPLATE="$SLIDES_HOME/template.qmd"
 THEME="$SLIDES_HOME/custom.scss"
 

@@ -8,12 +8,11 @@ self-contained `.html` deck you can present, mail or attach.
 quarto-slides/
 ├── template.qmd          a lorem ipsum deck showing the useful features
 ├── custom.scss           theme tweaks (fonts, colors, sizes)
-├── bin/slides            shell command: new, edit, preview, render, pdf
-└── vim/                  Vim plugin: preview in a WezTerm/tmux pane, render, open
-    ├── plugin/quarto_slides.vim
-    ├── autoload/quarto_slides.vim
-    └── after/ftplugin/quarto.vim
+└── bin/slides            shell command: new, edit, preview, render, pdf
 ```
+
+The Vim side (preview in a WezTerm/tmux pane, render, open) is a separate
+plugin, [vimoured/quarto-slides](https://github.com/vimoured/quarto-slides).
 
 ## How the pieces fit
 
@@ -43,21 +42,27 @@ quarto-slides/
    package from <https://quarto.org/docs/get-started/>. Check it with
    `quarto check`.
 2. **Clone** this repo anywhere, for example `~/src/quarto-slides`.
-3. **Shell:** put `bin/` on your PATH, in `~/.zshrc` or `~/.bashrc`:
+3. **Shell:** put `bin/` on your PATH, in `~/.zshrc` or `~/.bashrc`, or
+   link `bin/slides` into a directory already on it:
 
    ```sh
    export PATH="$HOME/src/quarto-slides/quarto-slides/bin:$PATH"
    ```
 
-4. **Vim (9.0 or newer):** load `vim/` as a local plugin with vim-plug:
+4. **Vim (9.1 or newer):** install the plugin, then bind its keys for `.qmd`
+   buffers in `~/.vim/after/ftplugin/quarto.vim` (in `after/`, so they win
+   over the markdown ftplugin's, which Vim also loads for `.qmd` files):
 
    ```vim
-   Plug '~/src/quarto-slides/quarto-slides/vim'
+   Plug 'vimoured/quarto-slides'
    ```
 
-   Then run `:PlugInstall` (nothing gets downloaded; it only adds the folder
-   to the runtimepath). Without vim-plug, use `set rtp+=~/src/quarto-slides/quarto-slides/vim`
-   and `set rtp+=~/src/quarto-slides/quarto-slides/vim/after`.
+   ```vim
+   " ~/.vim/after/ftplugin/quarto.vim
+   nmap <buffer> <localleader>p <Plug>(quarto-slides-preview)
+   nmap <buffer> <localleader>r <Plug>(quarto-slides-render)
+   nmap <buffer> <localleader>o <Plug>(quarto-slides-open)
+   ```
 
 Optional tools: `fzf`, `fd` and `bat` for `slides edit`; vim-dispatch, so that
 `_r` renders into the quickfix list; Node.js (`npx`) for `slides pdf`.
@@ -70,7 +75,7 @@ cd talks/2026-lorem
 slides edit                     # opens vim; with several decks, pick one with fzf
 ```
 
-In Vim (`_` is the local leader; keys work in `.qmd` buffers):
+In Vim, with the keys bound as above (`_` is the local leader):
 
 | Key  | Command          | What it does |
 | ---- | ---------------- | ------------ |
@@ -83,7 +88,6 @@ Settings:
 
 ```vim
 let g:quarto_slides_pane_percent = 30   " preview pane width (default 25)
-let g:quarto_slides_no_mappings = 1     " bind the <Plug>(quarto-slides-*) maps yourself
 ```
 
 Without Vim: `slides preview`, `slides render`, `slides pdf`.
