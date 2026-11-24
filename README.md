@@ -2,7 +2,8 @@
 
 A small toolkit for writing [reveal.js](https://revealjs.com) slide decks in
 Markdown with [Quarto](https://quarto.org), edited in Vim, with a live preview
-in a WezTerm or tmux pane.
+in a WezTerm or tmux pane (the Vim plugin is
+[vimoured/quarto-slides](https://github.com/vimoured/quarto-slides)).
 
 Everything is in [`quarto-slides/`](quarto-slides/). Its
 [README](quarto-slides/README.md) covers installation, the Vim setup and a
